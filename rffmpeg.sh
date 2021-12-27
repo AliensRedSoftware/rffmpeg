@@ -39,11 +39,11 @@ clear
 	for (( i = $START_TIMEOUT ; i > 0 ; i-- )); do echo "Запись видео начнется через $i сек"; sleep 1; done;
 	echo "Запись видео успешно идет :)";
 	ffmpeg \
-	-window_id $WINDOW_ID -f $FORMAT -draw_mouse $CURSOR -r $FPS -t $STOP_TIMEOUT -i $DISPLAY -f pulse -i default -f flv -acodec $ACODER -ac $ACHANNELS -ar $ARATE -ab $ABITRATE -af aresample=async=1 \
+	-window_id $WINDOW_ID -f $FORMAT -draw_mouse $CURSOR -r $FPS -i $DISPLAY -f pulse -i default -f flv -acodec $ACODER -ac $ACHANNELS -ar $ARATE -ab $ABITRATE -af aresample=async=1 \
 	-aspect 5:3 -vcodec $VCODER -g $FPSMAX -keyint_min $FPS -b:v $CBR -minrate $CBRMIN -maxrate $CBR -pix_fmt $PFMT \
 	-preset $QUALITY \
 	-vf "movie=lg.png [watermark]; [in][watermark] overlay=0:main_h-overlay_h-0 [out]" \
 	-nostats -loglevel 0 -tune film -threads $THREADS -strict normal \
-	-bufsize $CBR "$PROTOCOL://$SERVER/$STREAM_KEY"
+	-t $STOP_TIMEOUT -bufsize $CBR "$PROTOCOL://$SERVER/$STREAM_KEY"
 ./rffmpeg.sh
 #}
